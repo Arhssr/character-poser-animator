@@ -1,51 +1,88 @@
-# Copyright (c) Streamlit Inc. (2018-2022) Snowflake Inc. (2022)
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 import streamlit as st
-from streamlit.logger import get_logger
-
-LOGGER = get_logger(__name__)
-
-
-def run():
-    st.set_page_config(
-        page_title="Hello",
-        page_icon="👋",
-    )
-
-    st.write("# Welcome to Streamlit! 👋")
-
-    st.sidebar.success("Select a demo above.")
-
-    st.markdown(
-        """
-        Streamlit is an open-source app framework built specifically for
-        Machine Learning and Data Science projects.
-        **👈 Select a demo from the sidebar** to see some examples
-        of what Streamlit can do!
-        ### Want to learn more?
-        - Check out [streamlit.io](https://streamlit.io)
-        - Jump into our [documentation](https://docs.streamlit.io)
-        - Ask a question in our [community
-          forums](https://discuss.streamlit.io)
-        ### See more complex demos
-        - Use a neural net to [analyze the Udacity Self-driving Car Image
-          Dataset](https://github.com/streamlit/demo-self-driving)
-        - Explore a [New York City rideshare dataset](https://github.com/streamlit/demo-uber-nyc-pickups)
-    """
-    )
+import numpy as np
+import cv2
 
 
-if __name__ == "__main__":
-    run()
+# Create a Streamlit app
+st.title("2D Character Animator and Poser")
+
+# Upload character image
+character_image = st.file_uploader("Upload Character Image (PNG or JPG)", type=["png", "jpg", "jpeg"])
+
+if character_image:
+    # Display the uploaded character image
+    st.image(character_image, caption="Uploaded Character Image", use_column_width=True)
+
+    # Create sliders for limb positions
+    st.subheader("Character Limb Poser")
+    left_arm_x = st.slider("Left Arm X", min_value=-50, max_value=50, value=0)
+    left_arm_y = st.slider("Left Arm Y", min_value=-50, max_value=50, value=0)
+    right_arm_x = st.slider("Right Arm X", min_value=-50, max_value=50, value=0)
+    right_arm_y = st.slider("Right Arm Y", min_value=-50, max_value=50, value=0)
+
+    # Process and display the character with adjusted limb positions
+    if st.button("Apply Pose"):
+        if character_image:
+            character = cv2.imread(character_image.name)
+            character = cv2.cvtColor(character, cv2.COLOR_BGR2RGB)
+
+            # Apply limb adjustments (this is a simplified example)
+            # Adjust the pixel coordinates based on sliders
+            character_height, character_width, _ = character.shape
+            left_arm_x = character_width // 2 + left_arm_x
+            left_arm_y = character_height // 2 + left_arm_y
+            right_arm_x = character_width // 2 + right_arm_x
+            right_arm_y = character_height // 2 + right_arm_y
+
+            # Draw limbs on the character image (simplified)
+            cv2.line(character, (character_width // 2, character_height // 2),
+                     (left_arm_x, left_arm_y), (0, 255, 0), 5)
+            cv2.line(character, (character_width // 2, character_height // 2),
+                     (right_arm_x, right_arm_y), (0, 255, 0), 5)
+
+            # Display the character with adjusted limbs
+            st.image(character, caption="Character with Pose", use_column_width=True)
+import streamlit as st
+import numpy as np
+import cv2
+
+
+# Create a Streamlit app
+st.title("2D Character Animator and Poser")
+
+# Upload character image
+character_image = st.file_uploader("Upload Character Image (PNG or JPG)", type=["png", "jpg", "jpeg"])
+
+if character_image:
+    # Display the uploaded character image
+    st.image(character_image, caption="Uploaded Character Image", use_column_width=True)
+
+    # Create sliders for limb positions
+    st.subheader("Character Limb Poser")
+    left_arm_x = st.slider("Left Arm X", min_value=-50, max_value=50, value=0)
+    left_arm_y = st.slider("Left Arm Y", min_value=-50, max_value=50, value=0)
+    right_arm_x = st.slider("Right Arm X", min_value=-50, max_value=50, value=0)
+    right_arm_y = st.slider("Right Arm Y", min_value=-50, max_value=50, value=0)
+
+    # Process and display the character with adjusted limb positions
+    if st.button("Apply Pose"):
+        if character_image:
+            character = cv2.imread(character_image.name)
+            character = cv2.cvtColor(character, cv2.COLOR_BGR2RGB)
+
+            # Apply limb adjustments (this is a simplified example)
+            # Adjust the pixel coordinates based on sliders
+            character_height, character_width, _ = character.shape
+            left_arm_x = character_width // 2 + left_arm_x
+            left_arm_y = character_height // 2 + left_arm_y
+            right_arm_x = character_width // 2 + right_arm_x
+            right_arm_y = character_height // 2 + right_arm_y
+
+            # Draw limbs on the character image (simplified)
+            cv2.line(character, (character_width // 2, character_height // 2),
+                     (left_arm_x, left_arm_y), (0, 255, 0), 5)
+            cv2.line(character, (character_width // 2, character_height // 2),
+                     (right_arm_x, right_arm_y), (0, 255, 0), 5)
+
+            # Display the character with adjusted limbs
+            st.image(character, caption="Character with Pose", use_column_width=True)
